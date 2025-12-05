@@ -24,7 +24,7 @@ const TeamDetail = () => {
 
   const filterRef = useRef(null);
 
-  // Check if mobile
+  
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -123,7 +123,7 @@ const TeamDetail = () => {
         </button>
       )}
 
-      {/* DESKTOP SIDEBAR - EXACTLY THE SAME (No logout on desktop) */}
+      {/* DESKTOP SIDEBAR  */}
       <aside className="hidden md:block absolute bg-[#9C6ADE] flex flex-col text-white rounded-xl border border-purple-300"
         style={{ width: "201px", height: "1072px", top: "24px", left: "40px", borderRadius: "20px" }}>
         <div className="flex justify-center mt-10 mb-16 px-4">
@@ -143,7 +143,7 @@ const TeamDetail = () => {
         </nav>
       </aside>
 
-      {/* MOBILE SIDEBAR - Purple Background with Logout (Mobile only) */}
+      {/* MOBILE SIDEBAR  */}
       <aside className={`${isMobile ? 
         `fixed top-0 left-0 h-full w-64 z-40 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 bg-[#9B6ADE]` : 
         'hidden'} flex flex-col text-white py-10 px-7 rounded-lg shadow-lg`}>
@@ -184,7 +184,7 @@ const TeamDetail = () => {
         </nav>
       </aside>
 
-      {/* Overlay for mobile sidebar */}
+      
       {isMobile && isSidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-30"
@@ -205,8 +205,6 @@ const TeamDetail = () => {
             <span>Back to Teams</span>
           </button>
         </div>
-
-        {/* HEADER WITH BANNER - Full width */}
         <div className="mb-8">
           {/* BANNER - Full width */}
           <div className="relative rounded-xl overflow-hidden w-full h-40 mb-4">
@@ -219,7 +217,7 @@ const TeamDetail = () => {
           </div>
         </div>
 
-        {/* SEARCH AND FILTER - Full width */}
+        {/* SEARCH AND FILTER */}
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4 mb-8">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -262,7 +260,7 @@ const TeamDetail = () => {
           </div>
         </div>
 
-        {/* TABLE - Full width and increased size */}
+        {/* TABLE */}
         <div className="bg-white border border-purple-300 rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] lg:min-w-full">
@@ -305,7 +303,7 @@ const TeamDetail = () => {
             </table>
           </div>
 
-          {/* PAGINATION - Full width */}
+          {/* PAGINATION */}
           <div className="flex flex-col lg:flex-row items-center justify-between px-8 py-5 border-t border-gray-200 bg-gray-50">
             <div className="text-base text-gray-600 mb-4 lg:mb-0">
               Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length} records

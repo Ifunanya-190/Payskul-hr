@@ -12,7 +12,7 @@ const EmployeeProfile = () => {
   const [isMobile, setIsMobile] = React.useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
-  // Check if mobile
+  
   React.useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -67,7 +67,7 @@ const EmployeeProfile = () => {
         </button>
       )}
 
-      {/* SIDEBAR - Responsive */}
+      {/* SIDEBAR */}
       <aside className={`${isMobile ? 
         `fixed top-0 left-0 h-full w-64 z-40 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300` : 
         'hidden md:block absolute bg-[#9C6ADE] flex flex-col text-white rounded-xl border border-purple-300'}`
@@ -118,8 +118,6 @@ const EmployeeProfile = () => {
 
       {/* MAIN CONTENT */}
       <div className={`${isMobile ? 'ml-0' : 'md:ml-[280px]'} p-4 md:p-8`}>
-        
-        {/* HEADER - Responsive */}
         <div className="flex items-center justify-between mb-6">
           <button 
             onClick={() => navigate(-1)} 
@@ -131,7 +129,7 @@ const EmployeeProfile = () => {
           </button>
         </div>
 
-        {/* BANNER - Responsive */}
+        {/* BANNER  */}
         <div className="relative rounded-xl overflow-hidden h-24 md:h-32 mb-6">
           <img src={teamsBanner} className="w-full h-full object-cover" alt="Banner" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center pl-4 md:pl-8">
@@ -139,7 +137,7 @@ const EmployeeProfile = () => {
           </div>
         </div>
 
-        {/* PROFILE CARD - Responsive */}
+        {/* PROFILE CARD  */}
         <div className="bg-white rounded-3xl shadow-xl border border-gray-100 px-4 md:px-10 py-6 flex flex-col sm:flex-row items-center gap-6 mb-8">
           <img
             src={department?.teamPhoto || "https://via.placeholder.com/150"}
@@ -157,7 +155,7 @@ const EmployeeProfile = () => {
           </div>
         </div>
 
-        {/* FORM FIELDS - Responsive */}
+        {/* FORM FIELDS */}
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>

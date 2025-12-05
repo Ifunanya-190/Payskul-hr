@@ -3,7 +3,6 @@ import { Search, Bell, Home, User, FileText, Users, Settings, X, LogOut, Menu } 
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import profile from "../assets/Profile.jpg";
-// Import your team images
 import managementImg from "../assets/Managment.jpg";
 import techImg from "../assets/Tech.jpg";
 import sales from "../assets/Sales.jpg";
@@ -16,7 +15,7 @@ const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
-  // Check if mobile on mount and resize
+  
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -43,7 +42,7 @@ const Dashboard = () => {
   const [documentsProgress, setDocumentsProgress] = useState(0);
   const [leaveCount, setLeaveCount] = useState(0);
   
-  // FIXED: Safe notifications initialization
+  // Notifications state with error handling
   const [notifications, setNotifications] = useState(() => {
     try {
       const savedNotifs = localStorage.getItem("notifications");
@@ -96,7 +95,7 @@ const Dashboard = () => {
     return now.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
   }
 
-  // Add logout function
+ //Logout function
   const handleLogout = () => {
     localStorage.removeItem("currentUser");
     localStorage.removeItem("userToken");
@@ -104,7 +103,7 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  // FIXED: Calculate unread notifications with error handling
+  
   useEffect(() => {
     try {
       if (Array.isArray(notifications)) {
@@ -120,7 +119,7 @@ const Dashboard = () => {
     }
   }, [notifications]);
 
-  // Load user data and progress from localStorage - FIXED
+ // Load progress and user data on mount
   useEffect(() => {
     try {
       const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
@@ -140,7 +139,7 @@ const Dashboard = () => {
     }
   }, []);
 
-  // FIXED: Functional search with error handling
+  //Search functionality
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -185,7 +184,7 @@ const Dashboard = () => {
     clearSearch();
   };
 
-  // FIXED — Navigation
+  // Navigation
   const handleNavClick = (navId) => {
     setActiveNav(navId);
     const routes = {
@@ -200,7 +199,7 @@ const Dashboard = () => {
     if (isMobile) setIsSidebarOpen(false);
   };
 
-  // FIXED: Handle notification click with error handling
+  // Handle individual notification click
   const handleNotificationClick = (notificationId) => {
     try {
       if (Array.isArray(notifications)) {
@@ -213,7 +212,7 @@ const Dashboard = () => {
     }
   };
 
-  // FIXED: Add new notification with validation
+  // Add a new notification
   const addNotification = (text, emoji = "🔔") => {
     try {
       const newNotification = {
@@ -238,7 +237,7 @@ const Dashboard = () => {
     addNotification(`You viewed the ${team?.name} team`, "👥");
   };
 
-  // FIXED: Mark all notifications as read
+  
   const markAllAsRead = () => {
     try {
       if (Array.isArray(notifications)) {
@@ -268,7 +267,7 @@ const Dashboard = () => {
     navigate("/leave");
   };
 
-  // Refresh progress data - FIXED
+  // Refresh progress data
   const refreshProgress = () => {
     try {
       const savedProfileProgress = parseInt(localStorage.getItem("profileProgress") || "0");
@@ -287,7 +286,7 @@ const Dashboard = () => {
     }
   };
 
-  // FIXED: Progress cards data with safe rendering
+  
   const progressCards = [
     { 
       id: 1, 
@@ -326,12 +325,12 @@ const Dashboard = () => {
         </button>
       )}
 
-      {/* SIDEBAR - Responsive */}
+      {/* SIDEBAR */}
       <aside className={`${isMobile ? 
         `fixed top-0 left-0 h-full w-64 z-40 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300` : 
         'w-64 hidden md:block'} bg-[#9B6ADE] flex flex-col text-white py-10 px-7 rounded-lg shadow-lg mr-10 mt-4 ml-4`}>
         
-        {/* Close button for mobile */}
+       
         {isMobile && (
           <button
             onClick={() => setIsSidebarOpen(false)}
@@ -371,11 +370,9 @@ const Dashboard = () => {
         />
       )}
 
-      {/* ================= MAIN AREA ================= */}
+   
       <main className={`flex-1 bg-white ${isMobile ? 'ml-0' : ''}`}>
-        {/* ================= TOP PURPLE HEADER ================= */}
         <header className="bg-[#BFA4E9] px-4 md:px-10 py-5 flex flex-col md:flex-row items-center justify-between rounded-lg mt-4 mr-4">
-          {/* SEARCH BAR */}
           <div className={`w-full ${isMobile ? 'mb-4' : 'md:w-[40%]'} relative`}>
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
             <input
@@ -486,9 +483,7 @@ const Dashboard = () => {
 
           {/* ================= MAIN ROW ================= */}
           <div className="flex flex-col lg:flex-row gap-8 mb-12">
-            {/* LEFT COLUMN: 3 CARDS + MEDIUM PROFILE CARD */}
             <div className="flex-1">
-              {/* 3 PROGRESS CARDS - Responsive grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {progressCards.map((card) => (
                   <div

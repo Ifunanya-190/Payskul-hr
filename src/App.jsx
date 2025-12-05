@@ -4,8 +4,8 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import ForgotPassword from './components/ForgotPassword';
 import VerifyOTP from './components/VerifyOTP';
-import Dashboard from './components/Dashboard';  // Make sure this is imported
-import Profile from './components/Profile';  // <-- Add this
+import Dashboard from './components/Dashboard';  
+import Profile from './components/Profile';  
 import Document from './components/Document';
 import Teams from './components/Teams';
 import TeamDetail from './components/TeamDetail';

@@ -9,7 +9,7 @@ const SettingsPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Check if mobile
+ 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -81,7 +81,7 @@ const SettingsPage = () => {
     // Save to localStorage
     localStorage.setItem(settingId, (!settings[settingId]).toString());
     
-    // Show toast instead of console log
+    
     const settingName = toggleItems.find(item => item.id === settingId)?.label;
     showToast(
       `${settingName} turned ${!settings[settingId] ? 'ON' : 'OFF'}`,
@@ -95,7 +95,6 @@ const SettingsPage = () => {
       localStorage.setItem(key, settings[key].toString());
     });
     
-    // Show success toast instead of alert
     showToast("All settings saved successfully!", "success");
   };
 
@@ -153,7 +152,7 @@ const SettingsPage = () => {
         </button>
       )}
 
-      {/* DESKTOP SIDEBAR - EXACTLY THE SAME */}
+      {/* DESKTOP SIDEBAR  */}
       <aside className="hidden md:block absolute bg-[#9C6ADE] flex flex-col text-white rounded-xl border border-purple-300"
         style={{ width: "201px", height: "1072px", top: "24px", left: "40px", borderRadius: "20px" }}>
         <div className="flex justify-center mt-10 mb-16 px-4">
@@ -177,7 +176,7 @@ const SettingsPage = () => {
         </nav>
       </aside>
 
-      {/* MOBILE SIDEBAR - Purple Background */}
+      {/* MOBILE SIDEBAR */}
       <aside className={`${isMobile ? 
         `fixed top-0 left-0 h-full w-64 z-40 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 bg-[#9B6ADE]` : 
         'hidden'} flex flex-col text-white py-10 px-7 rounded-lg shadow-lg`}>
@@ -214,7 +213,7 @@ const SettingsPage = () => {
             </button>
           ))}
           
-          {/* Logout Button (Mobile Only) */}
+          {/* Logout Button */}
           <button
             onClick={handleLogout}
             className="flex items-center pl-5 py-3 rounded-full w-full text-white hover:bg-white/20 transition-all mt-10"
@@ -225,7 +224,7 @@ const SettingsPage = () => {
         </nav>
       </aside>
 
-      {/* Overlay for mobile sidebar */}
+  
       {isMobile && isSidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-30"
@@ -255,7 +254,7 @@ const SettingsPage = () => {
         </div>
       )}
 
-      {/* DESKTOP BANNER - EXACTLY THE SAME */}
+      {/* DESKTOP BANNER */}
       <div className="hidden md:block absolute rounded-xl overflow-hidden"
         style={{ width: "1128px", height: "106px", top: "24px", left: "272px" }}>
         <img 
@@ -280,7 +279,7 @@ const SettingsPage = () => {
         </div>
       </div>
 
-      {/* DESKTOP SETTINGS CONTAINER - EXACTLY THE SAME */}
+      {/* DESKTOP SETTINGS CONTAINER */}
       <div className="hidden md:block absolute bg-white border border-purple-300 rounded-2xl"
         style={{
           width: "1128px",

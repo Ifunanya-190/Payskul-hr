@@ -26,7 +26,7 @@ const Teams = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Check if mobile
+  
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -102,7 +102,7 @@ const Teams = () => {
     dept.people.some(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  // NOW GOES TO EMPLOYEE PROFILE
+  // Navigate to employee profile
   const handleMemberClick = (dept, person) => {
     navigate("/employee-profile", { 
       state: { 
@@ -135,7 +135,7 @@ const Teams = () => {
         </button>
       )}
 
-      {/* DESKTOP SIDEBAR - EXACTLY THE SAME */}
+      {/* DESKTOP SIDEBAR*/}
       <aside className="hidden md:block absolute bg-[#9C6ADE] flex flex-col text-white rounded-xl border border-purple-300"
         style={{ width: "201px", height: "1072px", top: "24px", left: "40px", borderRadius: "20px" }}>
         <div className="flex items-center justify-center mt-10 mb-16 px-4">
@@ -156,7 +156,7 @@ const Teams = () => {
         </nav>
       </aside>
 
-      {/* MOBILE SIDEBAR - Purple Background */}
+      {/* MOBILE SIDEBAR  */}
       <aside className={`${isMobile ? 
         `fixed top-0 left-0 h-full w-64 z-40 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 bg-[#9B6ADE]` : 
         'hidden'} flex flex-col text-white py-10 px-7 rounded-lg shadow-lg`}>
@@ -190,7 +190,7 @@ const Teams = () => {
             </button>
           ))}
           
-          {/* Logout Button (Mobile Only) */}
+          {/* Logout Button */}
           <button
             onClick={handleLogout}
             className="flex items-center pl-5 py-3 rounded-full w-full text-white hover:bg-white/20 transition-all mt-10"
@@ -201,7 +201,7 @@ const Teams = () => {
         </nav>
       </aside>
 
-      {/* Overlay for mobile sidebar */}
+     
       {isMobile && isSidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-30"
@@ -209,7 +209,7 @@ const Teams = () => {
         />
       )}
 
-      {/* DESKTOP BANNER - EXACTLY THE SAME */}
+      {/* DESKTOP BANNER */}
       <div className="hidden md:block absolute rounded-xl overflow-hidden" 
         style={{ width: "1128px", height: "106px", top: "24px", left: "272px" }}>
         <img src={teamsBanner} className="w-full h-full object-cover" alt="Banner" />
@@ -226,7 +226,7 @@ const Teams = () => {
         </div>
       </div>
 
-      {/* DESKTOP MAIN CONTAINER - EXACTLY THE SAME */}
+      {/* DESKTOP MAIN CONTAINER  */}
       <div className="hidden md:block absolute bg-white border border-purple-300 rounded-xl overflow-hidden"
         style={{ width: "1128px", height: "934px", top: "162px", left: "272px", borderRadius: "14px" }}>
         
@@ -244,7 +244,7 @@ const Teams = () => {
           </div>
         </div>
 
-        {/* GRID - PERFECT LAYOUT */}
+        {/* GRID  */}
         <div className="px-8 pt-6">
           <div className="grid grid-cols-2 gap-8 max-w-[1160px] mx-auto -mt-10">
             {filteredDepartments.map((dept, i) => (

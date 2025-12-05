@@ -33,7 +33,7 @@ const Login = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
-    setError(''); // Clear error when user types
+    setError(''); // Clear error on input change
   };
 
   const handleSubmit = (e) => {
@@ -41,7 +41,7 @@ const Login = () => {
     setIsLoading(true);
     setError('');
 
-    // Basic validation
+
     if (!formData.email || !formData.password) {
       setError('Please fill in all fields');
       setIsLoading(false);
@@ -81,7 +81,7 @@ const Login = () => {
         setIsLoading(false);
         
         // Redirect to dashboard
-        navigate('/dashboard'); // Change this to your desired redirect path
+        navigate('/dashboard'); 
         
       } else {
         setError('Invalid email or password');
@@ -94,7 +94,7 @@ const Login = () => {
   useEffect(() => {
     const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
-      // Optional: You can redirect to dashboard if user is already logged in
+      // Optional:  redirect to dashboard if user is already logged in
       // navigate('/dashboard');
     }
   }, [navigate]);
@@ -115,7 +115,6 @@ const Login = () => {
       {/* Login Form Section */}
       <div className="w-full lg:w-3/5 h-full flex flex-col justify-center p-4 sm:p-6 md:p-8">
         <div className="w-full max-w-md mx-auto">
-          {/* Logo */}
           <div className="mb-8">
             <div className="flex flex-col items-start">
               <div className="relative mb-3">
@@ -247,7 +246,6 @@ const Login = () => {
 
             {/* Social Login Links */}
             <div className="flex justify-center space-x-4">
-              {/* Google Link */}
               <a 
                 href="https://accounts.google.com/signin" 
                 target="_blank"
@@ -262,7 +260,7 @@ const Login = () => {
                 </svg>
               </a>
               
-              {/* Apple Link */}
+              
               <a 
                 href="https://appleid.apple.com/sign-in" 
                 target="_blank"

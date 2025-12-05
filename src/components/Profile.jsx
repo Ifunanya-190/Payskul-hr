@@ -11,7 +11,7 @@ import {
 import logo from "../assets/logo.png";
 import profile from "../assets/Profile.jpg";
 
-// Reusable Form Field Component
+
 const FormField = ({ label, field, type, placeholder, icon: Icon, options, isEditing, formData, handleInputChange }) => (
   <div className={type === "select" && options ? "mb-2" : "mb-3"}>
     <label className="text-xs text-gray-600 block mb-1">{label}</label>

@@ -10,7 +10,7 @@ const Document = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showClearModal, setShowClearModal] = useState(false);
   
-  // Check if mobile
+  
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -21,7 +21,7 @@ const Document = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Initial documents
+ 
   const [documents, setDocuments] = useState(() => {
     const savedDocs = localStorage.getItem("userDocuments");
     return savedDocs ? JSON.parse(savedDocs) : [
@@ -242,7 +242,7 @@ const Document = () => {
         </button>
       )}
 
-      {/* DESKTOP SIDEBAR - No logout */}
+     
       <aside className="hidden md:block absolute bg-[#9B6ADE] flex flex-col text-white rounded-xl border border-purple-300"
         style={{
           width: "201px",
@@ -309,7 +309,7 @@ const Document = () => {
             </button>
           ))}
           
-          {/* Logout Button - Mobile Only */}
+          {/* Logout Button */}
           <button
             onClick={handleLogout}
             className="flex items-center pl-5 py-3 rounded-full w-full text-white hover:bg-white/20 transition-all mt-10"
@@ -320,7 +320,7 @@ const Document = () => {
         </nav>
       </aside>
 
-      {/* Overlay for mobile sidebar */}
+      
       {isMobile && isSidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-30"
@@ -368,10 +368,10 @@ const Document = () => {
         </div>
       )}
 
-      {/* MAIN CONTENT */}
+      {/* MAIN CONTENT AREA */}
       <div className={`${isMobile ? 'ml-0' : 'md:ml-[280px]'} p-4 md:p-8`}>
         
-        {/* BANNER - Responsive */}
+       {/* BANNER */}
         <div className="relative rounded-xl overflow-hidden h-24 md:h-32 mb-6">
           <img
             src={profileHeader}
@@ -383,14 +383,12 @@ const Document = () => {
           </div>
         </div>
 
-        {/* MAIN CONTENT AREA - Responsive */}
+        {/* MAIN CONTENT AREA */}
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* LEFT SIDE: DOCUMENTS LIST */}
           <div className="flex-1">
             <div className="bg-white border border-purple-300 rounded-xl p-4 md:p-6">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <h2 className="text-lg md:text-xl font-bold text-gray-900">ALL DOCUMENTS</h2>
-                
                 {/* Add Document Button */}
                 <button
                   onClick={() => setShowAddDocument(true)}
@@ -541,7 +539,6 @@ const Document = () => {
 
           {/* RIGHT SIDE: PROGRESS + CONTROLS */}
           <div className="w-full lg:w-96">
-            {/* Progress Card */}
             <div className="bg-white border border-purple-300 rounded-xl p-5 mb-6">
               <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-4 mb-4">
                 <div className={`w-16 h-16 rounded-full border-4 flex items-center justify-center text-xl font-bold ${

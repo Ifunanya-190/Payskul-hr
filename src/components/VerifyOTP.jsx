@@ -85,7 +85,7 @@ const VerifyOTP = () => {
   const handleResendOTP = () => {
     const newOTP = Math.floor(10000 + Math.random() * 90000).toString();
 
-    // Save for verification (required for demo)
+    // Store new OTP
     localStorage.setItem('otp', newOTP);
     localStorage.setItem('otpEmail', email);
     localStorage.setItem('otpExpiry', Date.now() + 10 * 60 * 1000); // 10 min
@@ -261,7 +261,7 @@ const VerifyOTP = () => {
         </div>
       )}
 
-      {/* Optional: Add this CSS for bounce-in animation */}
+      {/* Bounce-in Animation Styles */}
       <style jsx>{`
         @keyframes bounce-in {
           0% {
