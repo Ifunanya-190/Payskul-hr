@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, ChevronDown } from 'lucide-react';
 import logo from '../assets/logo.png';
-import loginimage from '../assets/Loginimage.jpg';
+import loginimage from '../assets/LoginImage.jpg';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
