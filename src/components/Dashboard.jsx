@@ -15,6 +15,8 @@ const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
+  // For the bell tooltip
+  const [showBellTooltip, setShowBellTooltip] = useState(false);
   
   useEffect(() => {
     const checkMobile = () => {
@@ -95,14 +97,13 @@ const Dashboard = () => {
     return now.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
   }
 
- //Logout function
+  // Logout function
   const handleLogout = () => {
     localStorage.removeItem("currentUser");
     localStorage.removeItem("userToken");
     addNotification("You have been logged out", "👋");
     navigate("/login");
   };
-
   
   useEffect(() => {
     try {
@@ -119,7 +120,7 @@ const Dashboard = () => {
     }
   }, [notifications]);
 
- // Load progress and user data on mount
+  // Load progress and user data on mount
   useEffect(() => {
     try {
       const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
@@ -139,7 +140,7 @@ const Dashboard = () => {
     }
   }, []);
 
-  //Search functionality
+  // Search functionality
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -236,18 +237,33 @@ const Dashboard = () => {
     const team = teams.find(t => t.id === teamId);
     addNotification(`You viewed the ${team?.name} team`, "👥");
   };
-
   
   const markAllAsRead = () => {
-    try {
-      if (Array.isArray(notifications)) {
-        setNotifications(notifications.map(notif => ({ ...notif, read: true })));
-        addNotification("All notifications marked as read", "✓");
-      }
-    } catch (error) {
-      console.error("Error marking all as read:", error);
+  try {
+    if (Array.isArray(notifications) && notifications.length > 0) {
+      // Mark all existing notifications as read
+      const updatedNotifications = notifications.map(notif => ({ 
+        ...notif, 
+        read: true 
+      }));
+      
+      const successNotification = {
+        id: Date.now(),
+        text: "All notifications marked as read",
+        date: getCurrentDate(),
+        read: true, 
+        emoji: "✓",
+        type: "system"
+      };
+      
+      const finalNotifications = [successNotification, ...updatedNotifications];
+      setNotifications(finalNotifications);
+      localStorage.setItem("notifications", JSON.stringify(finalNotifications));
     }
-  };
+  } catch (error) {
+    console.error("Error marking all as read:", error);
+  }
+};
 
   // Handle profile completion
   const handleCompleteProfile = () => {
@@ -264,7 +280,7 @@ const Dashboard = () => {
   // Handle leave view
   const handleViewLeave = () => {
     addNotification("Viewing leave schedule", "🏖️");
-    navigate("/leave");
+    navigate("");
   };
 
   // Refresh progress data
@@ -285,7 +301,6 @@ const Dashboard = () => {
       console.error("Error refreshing progress:", error);
     }
   };
-
   
   const progressCards = [
     { 
@@ -325,12 +340,12 @@ const Dashboard = () => {
         </button>
       )}
 
-      {/* SIDEBAR */}
+      {/* SIDEBAR - Fixed to hide completely when closed */}
       <aside className={`${isMobile ? 
-        `fixed top-0 left-0 h-full w-64 z-40 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300` : 
-        'w-64 hidden md:block'} bg-[#9B6ADE] flex flex-col text-white py-10 px-7 rounded-lg shadow-lg mr-10 mt-4 ml-4`}>
+        `fixed top-0 left-0 h-full w-64 z-40 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out` : 
+        'w-64 hidden md:block'} bg-[#9B6ADE] flex flex-col text-white py-10 px-7 shadow-lg ${isMobile ? '' : 'mt-4 ml-4 rounded-lg'}`}>
         
-       
+        {/* Close button for mobile */}
         {isMobile && (
           <button
             onClick={() => setIsSidebarOpen(false)}
@@ -359,6 +374,17 @@ const Dashboard = () => {
               <span className="text-sm">{item.label}</span>
             </button>
           ))}
+          
+          {/* Logout in sidebar for mobile */}
+          {isMobile && (
+            <button
+              onClick={handleLogout}
+              className="flex items-center pl-5 py-3 rounded-full w-full text-white hover:bg-white/20 transition-all"
+            >
+              <LogOut className="mr-3 w-5 h-5" />
+              <span className="text-sm">Logout</span>
+            </button>
+          )}
         </nav>
       </aside>
 
@@ -370,7 +396,7 @@ const Dashboard = () => {
         />
       )}
 
-   
+      {/* MAIN CONTENT AREA */}
       <main className={`flex-1 bg-white ${isMobile ? 'ml-0' : ''}`}>
         <header className="bg-[#BFA4E9] px-4 md:px-10 py-5 flex flex-col md:flex-row items-center justify-between rounded-lg mt-4 mr-4">
           <div className={`w-full ${isMobile ? 'mb-4' : 'md:w-[40%]'} relative`}>
@@ -422,48 +448,74 @@ const Dashboard = () => {
 
           {/* RIGHT SIDE: BELL + LOGOUT + PROFILE */}
           <div className="flex items-center space-x-4 md:space-x-8">
-            {/* Bell Icon with Notification Badge */}
-            <div className="relative">
-              <Bell className="w-6 h-6 text-white cursor-pointer" onClick={() => addNotification("You checked notifications", "🔔")} />
+            <div 
+              className="relative group"
+              onMouseEnter={() => setShowBellTooltip(true)}
+              onMouseLeave={() => setShowBellTooltip(false)}
+              onTouchStart={() => setShowBellTooltip(true)}
+              onTouchEnd={() => setTimeout(() => setShowBellTooltip(false), 1500)}
+            >
+              {/* Bell icon (non-clickable) */}
+              <div className="p-2 cursor-default">
+                <Bell className="w-6 h-6 text-white" />
+              </div>
+              
+              {/* Notification badge */}
               {unreadNotifications > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                   {unreadNotifications}
                 </span>
               )}
-            </div>
-
-            {/* Logout Button with Red Icon */}
-            <button
-              onClick={handleLogout}
-              className="relative p-2 rounded-full hover:bg-white/20 transition-colors group"
-              title="Logout"
-            >
-              <div className="relative">
-                <LogOut className="w-5 h-5 text-red-300 hover:text-red-500 transition-colors" />
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-              </div>
-              {/* Tooltip on hover */}
-              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                Logout
-              </div>
-            </button>
-
-            {/* Profile section */}
-            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => handleNavClick("profile")}>
-              <div className="w-10 h-10 md:w-12 md:h-12">
-                <img 
-                  src={profile} 
-                  alt="Profile" 
-                  className="w-full h-full rounded-full object-cover"
-                />
-              </div>
-              {!isMobile && (
-                <div className="text-white">
-                  <p className="font-semibold text-sm">{userData.fullName || "User"}</p>
-                  <p className="text-xs opacity-80">{userData.role || "Developer"}</p>
+              
+              {/* Tooltip for bell */}
+              {showBellTooltip && (
+                <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-3 py-2 rounded whitespace-nowrap z-50">
+                  Check notifications
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-gray-800"></div>
                 </div>
               )}
             </div>
+
+            {/* Logout Button with Red Icon */}
+            {!isMobile && (
+              <button
+                onClick={handleLogout}
+                className="relative p-2 rounded-full hover:bg-white/20 transition-colors group"
+                title="Logout"
+              >
+                <div className="relative">
+                  <LogOut className="w-5 h-5 text-red-300 hover:text-red-500 transition-colors" />
+                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                </div>
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  Logout
+                </div>
+              </button>
+            )}
+
+            {/* Profile section */}
+          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => handleNavClick("profile")}>
+          <div className="w-10 h-10 md:w-12 md:h-12">
+            <img 
+              src={profile} 
+              alt="Profile" 
+              className="w-full h-full rounded-full object-cover"
+            />
+          </div>
+          {/* Show name and role with responsive styling */}
+          <div className="hidden sm:block text-white">
+            <p className="font-semibold text-sm">{userData.fullName || "User"}</p>
+            <p className="text-xs opacity-80">{userData.role || "Developer"}</p>
+          </div>
+          <div className="sm:hidden text-white">
+            <p className="font-semibold text-sm">
+              {userData.fullName ? userData.fullName.split(' ')[0] : "User"}
+            </p>
+            <p className="text-[10px] opacity-80 truncate max-w-[60px]">
+              {userData.role || "Dev"}
+            </p>
+          </div>
+          </div>
           </div>
         </header>
 

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import profileHeader from "../assets/ProfileHeader.jpg";
 import {
   Home, User, FileText, Users, Settings, Edit, Mail, Phone,
   Building, Calendar, MapPin, User as UserIcon, Heart,
   CreditCard, Users as UnitIcon, UserCheck, Hash, Bell,
-  Menu, X, LogOut,
+  Menu, X, LogOut, Upload, XCircle, CheckCircle,
 } from "lucide-react";
 
 import logo from "../assets/logo.png";
@@ -113,30 +113,30 @@ const PersonalInfoTab = ({ isMobile, isEditing, formData, handleInputChange }) =
 
   return (
     <>
-      <div className="absolute bg-white border border-purple-300 rounded-xl"
-        style={{ width: "788px", height: "328px", top: "264px", left: "272px", padding: "16px" }}>
+      <div className="absolute bg-white border border-purple-300 rounded-xl p-4"
+        style={{ width: "788px", height: "328px", top: "264px", left: "272px" }}>
         <h2 className="text-lg font-bold text-gray-900 mb-4">PERSONAL INFORMATION</h2>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-4">
           {personalFields.map((field, index) => (
             <FormField key={index} {...field} isEditing={isEditing} formData={formData} handleInputChange={handleInputChange} />
           ))}
         </div>
       </div>
 
-      <div className="absolute bg-white border border-purple-300 rounded-xl"
-        style={{ width: "786px", height: "140px", top: "632px", left: "272px", padding: "16px" }}>
+      <div className="absolute bg-white border border-purple-300 rounded-xl p-4"
+        style={{ width: "788px", height: "140px", top: "632px", left: "272px" }}>
         <h2 className="text-lg font-bold text-gray-900 mb-4">HOME ADDRESS</h2>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-4">
           {addressFields.map((field, index) => (
             <FormField key={index} {...field} isEditing={isEditing} formData={formData} handleInputChange={handleInputChange} />
           ))}
         </div>
       </div>
 
-      <div className="absolute bg-white border border-purple-300 rounded-xl"
-        style={{ width: "786px", height: "140px", top: "812px", left: "272px", padding: "16px" }}>
+      <div className="absolute bg-white border border-purple-300 rounded-xl p-4"
+        style={{ width: "788px", height: "140px", top: "812px", left: "272px" }}>
         <h2 className="text-lg font-bold text-gray-900 mb-4">EMERGENCY CONTACT</h2>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-4">
           {emergencyFields.map((field, index) => (
             <FormField key={index} {...field} isEditing={isEditing} formData={formData} handleInputChange={handleInputChange} />
           ))}
@@ -169,8 +169,8 @@ const EmploymentInfoTab = ({ isMobile, isEditing, formData, handleInputChange })
   }
 
   return (
-    <div className="absolute bg-white border border-purple-300 rounded-xl"
-      style={{ width: "788px", height: "213px", top: "264px", left: "272px", padding: "16px", borderRadius: "14px" }}>
+    <div className="absolute bg-white border border-purple-300 rounded-xl p-4"
+      style={{ width: "788px", height: "213px", top: "264px", left: "272px" }}>
       <h2 className="text-lg font-bold text-gray-900 mb-4">EMPLOYMENT INFORMATION</h2>
       <div className="grid grid-cols-3 gap-4">
         {employmentFields.map((field, index) => (
@@ -219,9 +219,9 @@ const BankInfoTab = ({ isMobile, isEditing, formData, handleInputChange }) => {
 
   return (
     <>
-      <div className="absolute bg-white border border-purple-300 rounded-xl"
-        style={{ width: "788px", height: "99px", top: "264px", left: "272px", padding: "16px", borderRadius: "14px" }}>
-        <h2 className="text-lg font-bold text-gray-900 mb-2">BANK INFORMATION</h2>
+      <div className="absolute bg-white border border-purple-300 rounded-xl p-4"
+        style={{ width: "788px", height: "auto", top: "264px", left: "272px", minHeight: "140px" }}>
+        <h2 className="text-lg font-bold text-gray-900 mb-4">BANK INFORMATION</h2>
         <div className="grid grid-cols-3 gap-4">
           {bankFields.map((field, index) => (
             <FormField key={index} {...field} isEditing={isEditing} formData={formData} handleInputChange={handleInputChange} />
@@ -229,9 +229,9 @@ const BankInfoTab = ({ isMobile, isEditing, formData, handleInputChange }) => {
         </div>
       </div>
 
-      <div className="absolute bg-white border border-purple-300 rounded-xl"
-        style={{ width: "786px", height: "139px", top: "403px", left: "272px", padding: "16px" }}>
-        <h2 className="text-lg font-bold text-gray-400 mb-4">Other details</h2>
+      <div className="absolute bg-white border border-purple-300 rounded-xl p-4"
+        style={{ width: "788px", height: "auto", top: "424px", left: "272px", minHeight: "140px", marginTop: "20px" }}>
+        <h2 className="text-lg font-bold text-gray-400 mb-4">OTHER DETAILS</h2>
         <div className="grid grid-cols-2 gap-4">
           {otherFields.map((field, index) => (
             <FormField key={index} {...field} isEditing={isEditing} formData={formData} handleInputChange={handleInputChange} />
@@ -243,8 +243,8 @@ const BankInfoTab = ({ isMobile, isEditing, formData, handleInputChange }) => {
 };
 
 // Profile Card Component
-const ProfileCard = ({ isMobile, userData, handleProfileImageEdit, handleEditClick, handleCancelClick, handleSaveClick, isEditing }) => (
-  <div className={`${isMobile ? 'px-4 mb-8' : 'absolute flex flex-col'}`}
+const ProfileCard = ({ isMobile, userData, handleProfileImageEdit, handleEditClick, handleCancelClick, handleSaveClick, isEditing, profileImage, isUploading, uploadProgress, onImageSelect, cancelImageUpload, confirmImageUpload }) => (
+  <div className={`${isMobile ? 'px-4 mt-8' : 'absolute flex flex-col'}`}
     style={!isMobile ? { width: "318px", top: "183px", left: "1082px", gap: "56px" } : {}}>
     
     <div className="bg-white border border-purple-300 rounded-xl p-6 mb-6">
@@ -252,14 +252,62 @@ const ProfileCard = ({ isMobile, userData, handleProfileImageEdit, handleEditCli
         <h3 className="text-lg font-bold text-gray-900 mb-6">Public profile</h3>
         
         <div className="relative">
-          <img src={profile} alt="Profile" className="w-32 h-32 rounded-full object-cover mb-4 border-4 border-white shadow-lg" />
-          <button 
-            onClick={handleProfileImageEdit}
-            className="absolute bottom-4 right-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition-colors"
-            title="Edit profile picture"
-          >
-            <Edit size={16} className="text-purple-600" />
-          </button>
+          {/* Profile Image with Upload Progress */}
+          <div className="relative">
+            <img 
+              src={profileImage || profile} 
+              alt="Profile" 
+              className="w-32 h-32 rounded-full object-cover mb-4 border-4 border-white shadow-lg"
+            />
+            
+            {/* Upload Progress Overlay */}
+            {isUploading && (
+              <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
+                <div className="text-white text-center">
+                  <div className="text-sm mb-1">Uploading...</div>
+                  <div className="w-20 h-2 bg-gray-300 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-green-500 transition-all duration-300"
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                  <div className="text-xs mt-1">{uploadProgress}%</div>
+                </div>
+              </div>
+            )}
+            
+            <button 
+              onClick={handleProfileImageEdit}
+              className="absolute bottom-4 right-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition-colors"
+              title="Edit profile picture"
+              disabled={isUploading}
+            >
+              <Edit size={16} className="text-purple-600" />
+            </button>
+          </div>
+          
+          {/* Upload Controls (shown when image is selected but not confirmed) */}
+          {!isUploading && userData.profileImagePreview && (
+            <div className="mt-4 p-3 bg-purple-50 rounded-lg border border-purple-200">
+              <p className="text-xs text-gray-600 mb-2 text-center">New image selected</p>
+              <div className="flex gap-2 justify-center">
+                <button
+                  onClick={confirmImageUpload}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-green-500 text-white text-xs rounded-lg hover:bg-green-600 transition-colors"
+                >
+                  <CheckCircle size={14} />
+                  Confirm
+                </button>
+                <button
+                  onClick={cancelImageUpload}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600 transition-colors"
+                >
+                  <XCircle size={14} />
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </div>
         
         <h3 className="font-bold text-gray-800 text-lg text-center">
@@ -291,10 +339,11 @@ const ProfileCard = ({ isMobile, userData, handleProfileImageEdit, handleEditCli
       </div>
     </div>
 
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 mb-8">
       <button 
         onClick={isEditing ? handleCancelClick : handleEditClick}
         className="w-full bg-white border-2 border-purple-400 text-purple-700 px-8 py-4 rounded-xl hover:bg-purple-50 transition-colors font-semibold text-sm flex items-center justify-center gap-2"
+        disabled={isUploading}
       >
         <Edit size={18} />
         {isEditing ? "Cancel Editing" : "Edit Profile"}
@@ -303,6 +352,7 @@ const ProfileCard = ({ isMobile, userData, handleProfileImageEdit, handleEditCli
         <button 
           onClick={handleSaveClick}
           className="w-full bg-purple-600 text-white px-8 py-4 rounded-xl hover:bg-purple-700 transition-colors font-semibold text-sm flex items-center justify-center gap-2"
+          disabled={isUploading}
         >
           <Bell size={18} />
           Save Profile
@@ -443,6 +493,12 @@ const Profile = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
+  // Image upload states
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [profileImage, setProfileImage] = useState(null);
+  const fileInputRef = useRef(null);
+  
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
@@ -463,7 +519,24 @@ const Profile = () => {
 
   const [userData, setUserData] = useState(() => {
     const saved = localStorage.getItem("currentUser");
-    return saved ? JSON.parse(saved) : { fullName: "", role: "", email: "", phone: "", department: "" };
+    const defaultUser = { 
+      fullName: "", 
+      role: "", 
+      email: "", 
+      phone: "", 
+      department: "",
+      profileImage: null 
+    };
+    
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Load saved profile image if exists
+      if (parsed.profileImage) {
+        setProfileImage(parsed.profileImage);
+      }
+      return { ...defaultUser, ...parsed };
+    }
+    return defaultUser;
   });
 
   const tabSections = [
@@ -476,11 +549,138 @@ const Profile = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const calculateProfileProgress = () => {
-    const filled = [formData.firstName, formData.lastName, formData.email]
-      .filter(field => field && field.toString().trim() !== "").length;
-    return Math.round((filled / 3) * 100);
+  // Function to trigger file input
+  const handleProfileImageEdit = () => {
+    fileInputRef.current.click();
   };
+
+  // Handle file selection
+  const handleImageSelect = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      setSaveMessage({ 
+        text: "❌ Please select a valid image file (JPEG, PNG, GIF, WebP)", 
+        type: "error" 
+      });
+      setTimeout(() => setSaveMessage({ text: "", type: "" }), 3000);
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      setSaveMessage({ 
+        text: "❌ Image size should be less than 5MB", 
+        type: "error" 
+      });
+      setTimeout(() => setSaveMessage({ text: "", type: "" }), 3000);
+      return;
+    }
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imagePreview = e.target.result;
+      
+      // Show preview and confirmation controls
+      const updatedUserData = {
+        ...userData,
+        profileImagePreview: imagePreview
+      };
+      setUserData(updatedUserData);
+      localStorage.setItem("currentUser", JSON.stringify(updatedUserData));
+    };
+    reader.readAsDataURL(file);
+
+    // Reset file input
+    event.target.value = '';
+  };
+
+  // Simulate image upload with progress
+  const confirmImageUpload = () => {
+    if (!userData.profileImagePreview) return;
+
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    // Simulate upload progress
+    const interval = setInterval(() => {
+      setUploadProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          
+          // Complete the upload
+          setTimeout(() => {
+            const finalImageUrl = userData.profileImagePreview;
+            setProfileImage(finalImageUrl);
+            
+            const updatedUserData = {
+              ...userData,
+              profileImage: finalImageUrl,
+              profileImagePreview: null
+            };
+            setUserData(updatedUserData);
+            localStorage.setItem("currentUser", JSON.stringify(updatedUserData));
+            
+            setIsUploading(false);
+            setUploadProgress(0);
+            
+            setSaveMessage({ 
+              text: "✅ Profile image updated successfully!", 
+              type: "success" 
+            });
+            setTimeout(() => setSaveMessage({ text: "", type: "" }), 3000);
+          }, 500);
+          
+          return 100;
+        }
+        return prev + 10;
+      });
+    }, 200);
+  };
+
+  // Cancel image upload
+  const cancelImageUpload = () => {
+    const updatedUserData = { ...userData, profileImagePreview: null };
+    setUserData(updatedUserData);
+    localStorage.setItem("currentUser", JSON.stringify(updatedUserData));
+  };
+
+  const calculateProfileProgress = () => {
+  // Define which fields are essential for profile completion
+  const essentialFields = [
+    { value: formData.firstName, weight: 2 },   
+    { value: formData.lastName, weight: 2 },     
+    { value: formData.email, weight: 2 },        
+    { value: formData.phoneNumber, weight: 1 },
+    { value: formData.gender, weight: 1 },
+    { value: formData.dateOfBirth, weight: 1 },
+    { value: formData.nationality, weight: 1 },
+    { value: formData.department, weight: 2 },   
+    { value: formData.employmentStatus, weight: 1 },
+    { value: profileImage || userData.profileImage, weight: 1 }, 
+  ];
+  
+  // Calculate weighted score
+  let totalScore = 0;
+  let maxScore = 0;
+  
+  essentialFields.forEach(field => {
+    const isFilled = field.value && field.value.toString().trim() !== "";
+    if (isFilled) {
+      totalScore += field.weight;
+    }
+    maxScore += field.weight;
+  });
+  
+  // Calculate percentage (rounded)
+  const percentage = Math.round((totalScore / maxScore) * 100);
+  return Math.min(percentage, 100); // Cap at 100%
+};
 
   const handleSaveClick = () => {
     try {
@@ -489,6 +689,7 @@ const Profile = () => {
         .filter(name => name && name.trim() !== "").join(" ");
       
       const updatedUserData = {
+        ...userData,
         fullName: fullName || "Not provided",
         role: formData.department || "Not provided",
         email: formData.email || "Not provided",
@@ -522,10 +723,6 @@ const Profile = () => {
     setTimeout(() => setSaveMessage({ text: "", type: "" }), 2000);
   };
 
-  const handleProfileImageEdit = () => {
-    alert("Profile image edit functionality would open a file picker here!");
-  };
-
   const handleNavigation = (path) => navigate(path);
 
   const handleLogout = () => {
@@ -544,7 +741,16 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white">
+    <div className="min-h-screen w-full bg-white relative">
+      {/* Hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        className="hidden"
+        accept="image/*"
+        onChange={handleImageSelect}
+      />
+      
       <Sidebar 
         isMobile={isMobile} 
         isSidebarOpen={isSidebarOpen} 
@@ -602,18 +808,47 @@ const Profile = () => {
 
       <SaveMessage saveMessage={saveMessage} isMobile={isMobile} />
 
-      {!isMobile && <div className="hidden md:block">{renderTabContent()}</div>}
-      {isMobile && <div className="md:hidden px-4">{renderTabContent()}</div>}
-
-      <ProfileCard
-        isMobile={isMobile}
-        userData={userData}
-        handleProfileImageEdit={handleProfileImageEdit}
-        handleEditClick={() => setIsEditing(!isEditing)}
-        handleCancelClick={handleCancelClick}
-        handleSaveClick={handleSaveClick}
-        isEditing={isEditing}
-      />
+      {!isMobile ? (
+        <div className="hidden md:block">
+          {renderTabContent()}
+          <ProfileCard
+            isMobile={isMobile}
+            userData={userData}
+            handleProfileImageEdit={handleProfileImageEdit}
+            handleEditClick={() => setIsEditing(!isEditing)}
+            handleCancelClick={handleCancelClick}
+            handleSaveClick={handleSaveClick}
+            isEditing={isEditing}
+            profileImage={profileImage || userData.profileImage}
+            isUploading={isUploading}
+            uploadProgress={uploadProgress}
+            onImageSelect={handleImageSelect}
+            cancelImageUpload={cancelImageUpload}
+            confirmImageUpload={confirmImageUpload}
+          />
+        </div>
+      ) : (
+        <div className="md:hidden">
+          <div className="px-4">
+            {renderTabContent()}
+          </div>
+          <ProfileCard
+            isMobile={isMobile}
+            userData={userData}
+            handleProfileImageEdit={handleProfileImageEdit}
+            handleEditClick={() => setIsEditing(!isEditing)}
+            handleCancelClick={handleCancelClick}
+            handleSaveClick={handleSaveClick}
+            isEditing={isEditing}
+            profileImage={profileImage || userData.profileImage}
+            isUploading={isUploading}
+            uploadProgress={uploadProgress}
+            onImageSelect={handleImageSelect}
+            cancelImageUpload={cancelImageUpload}
+            confirmImageUpload={confirmImageUpload}
+          />
+        </div>
+      )}
     </div>
   );
 };

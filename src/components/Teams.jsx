@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Home,
@@ -11,6 +11,8 @@ import {
   Menu,
   X,
   LogOut,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 import logo from "../assets/logo.png";
@@ -19,14 +21,18 @@ import designTeamPhoto from "../assets/Brand&Comms.jpg";
 import salesTeamPhoto from "../assets/Sales.jpg";
 import pmTeamPhoto from "../assets/Managment.jpg";
 import marketingTeamPhoto from "../assets/Marketing.jpg";
+import techTeamPhoto from "../assets/Tech.jpg";
 
 const Teams = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobile, setIsMobile] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+  const [currentSlide, setCurrentSlide] = useState(0);
   
+  // Create a ref for the scroll container
+  const scrollContainerRef = useRef(null);
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -46,6 +52,7 @@ const Teams = () => {
     { id: "settings", label: "Settings", icon: Settings, path: "/settings" },
   ];
 
+  // Updated departments with Tech Department
   const departments = [
     {
       name: "Design Department",
@@ -95,6 +102,18 @@ const Teams = () => {
         { name: "Cody Fisher", role: "Marketing", email: "cody.mark@payskul.com" },
       ],
     },
+    {
+      name: "Tech Department",
+      members: 25,
+      teamPhoto: techTeamPhoto,
+      people: [
+        { name: "John Smith", role: "Lead Software Engineer", email: "john@payskul.com" },
+        { name: "Sarah Johnson", role: "Sr. Backend Developer", email: "sarah@payskul.com" },
+        { name: "Michael Chen", role: "Sr. Frontend Developer", email: "michael@payskul.com" },
+        { name: "Emily Davis", role: "DevOps Engineer", email: "emily@payskul.com" },
+        { name: "David Wilson", role: "Mobile Developer", email: "david@payskul.com" },
+      ],
+    },
   ];
 
   const filteredDepartments = departments.filter(dept =>
@@ -123,6 +142,21 @@ const Teams = () => {
     navigate("/login");
   };
 
+  // Scroll functions for mobile
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+      setCurrentSlide(prev => Math.max(0, prev - 1));
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+      setCurrentSlide(prev => Math.min(departments.length - 1, prev + 1));
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-white">
       {/* Mobile Menu Button */}
@@ -135,7 +169,7 @@ const Teams = () => {
         </button>
       )}
 
-      {/* DESKTOP SIDEBAR*/}
+      {/* DESKTOP SIDEBAR */}
       <aside className="hidden md:block absolute bg-[#9C6ADE] flex flex-col text-white rounded-xl border border-purple-300"
         style={{ width: "201px", height: "1072px", top: "24px", left: "40px", borderRadius: "20px" }}>
         <div className="flex items-center justify-center mt-10 mb-16 px-4">
@@ -156,7 +190,7 @@ const Teams = () => {
         </nav>
       </aside>
 
-      {/* MOBILE SIDEBAR  */}
+      {/* MOBILE SIDEBAR */}
       <aside className={`${isMobile ? 
         `fixed top-0 left-0 h-full w-64 z-40 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 bg-[#9B6ADE]` : 
         'hidden'} flex flex-col text-white py-10 px-7 rounded-lg shadow-lg`}>
@@ -201,7 +235,7 @@ const Teams = () => {
         </nav>
       </aside>
 
-     
+      {/* Overlay for mobile sidebar */}
       {isMobile && isSidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-30"
@@ -226,7 +260,7 @@ const Teams = () => {
         </div>
       </div>
 
-      {/* DESKTOP MAIN CONTAINER  */}
+      {/* DESKTOP MAIN CONTAINER - Updated for 2x3 grid */}
       <div className="hidden md:block absolute bg-white border border-purple-300 rounded-xl overflow-hidden"
         style={{ width: "1128px", height: "934px", top: "162px", left: "272px", borderRadius: "14px" }}>
         
@@ -244,12 +278,12 @@ const Teams = () => {
           </div>
         </div>
 
-        {/* GRID  */}
-        <div className="px-8 pt-6">
-          <div className="grid grid-cols-2 gap-8 max-w-[1160px] mx-auto -mt-10">
+        {/* GRID - Changed to 2x3 layout */}
+        <div className="px-8 pt-6 h-[calc(100%-120px)] overflow-y-auto">
+          <div className="grid grid-cols-2 gap-8 pb-8">
             {filteredDepartments.map((dept, i) => (
               <div key={i} className="bg-white border border-purple-300 rounded-2xl shadow-sm overflow-hidden"
-                style={{ width: "532.6666870117188px", height: "410px" }}>
+                style={{ width: "100%", minHeight: "410px", maxWidth: "532px" }}>
                 
                 {/* HEADER */}
                 <div className="px-8 pt-6 pb-4 border-b border-gray-100">
@@ -274,7 +308,7 @@ const Teams = () => {
                         key={idx}
                         onClick={() => handleMemberClick(dept, person)}
                         className="flex items-center justify-between group rounded-lg hover:bg-purple-50/80 transition cursor-pointer"
-                        style={{ width: "490.888916015625px", height: "42px", padding: "0 12px" }}
+                        style={{ width: "100%", height: "42px", padding: "0 12px" }}
                       >
                         <div className="flex items-center gap-3">
                           <img 
@@ -298,10 +332,10 @@ const Teams = () => {
         </div>
       </div>
 
-      {/* MOBILE MAIN CONTAINER */}
-      <div className="md:hidden bg-white border border-purple-300 rounded-xl mx-4 mb-8">
+      {/* MOBILE MAIN CONTAINER WITH HORIZONTAL SCROLL */}
+      <div className="md:hidden">
         {/* SEARCH */}
-        <div className="p-4 border-b border-gray-200">
+        <div className="p-4 border-b border-gray-200 bg-white mx-4 mt-4 rounded-xl border border-purple-300">
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input 
@@ -314,11 +348,54 @@ const Teams = () => {
           </div>
         </div>
 
-        {/* TEAMS GRID */}
-        <div className="p-4">
-          <div className="space-y-4">
+        {/* TEAMS SLIDER/CAROUSEL */}
+        <div className="relative px-4 mt-6">
+          {/* Scroll buttons */}
+          <div className="flex justify-between items-center mb-4">
+            <button
+              onClick={scrollLeft}
+              disabled={currentSlide === 0}
+              className={`p-2 rounded-full ${currentSlide === 0 ? 'text-gray-300' : 'text-purple-600 bg-purple-100 hover:bg-purple-200'}`}
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            
+            <div className="flex space-x-2">
+              {departments.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full ${index === currentSlide ? 'bg-purple-600' : 'bg-gray-300'}`}
+                />
+              ))}
+            </div>
+            
+            <button
+              onClick={scrollRight}
+              disabled={currentSlide === departments.length - 1}
+              className={`p-2 rounded-full ${currentSlide === departments.length - 1 ? 'text-gray-300' : 'text-purple-600 bg-purple-100 hover:bg-purple-200'}`}
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Horizontal Scroll Container */}
+          <div 
+            ref={scrollContainerRef}
+            className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-4 pb-4"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            onScroll={(e) => {
+              const container = e.target;
+              const scrollLeft = container.scrollLeft;
+              const itemWidth = container.clientWidth;
+              const newSlide = Math.round(scrollLeft / itemWidth);
+              setCurrentSlide(newSlide);
+            }}
+          >
             {filteredDepartments.map((dept, i) => (
-              <div key={i} className="bg-white border border-purple-300 rounded-2xl shadow-sm overflow-hidden">
+              <div 
+                key={i}
+                className="flex-shrink-0 w-[calc(100vw-2rem)] snap-center bg-white border border-purple-300 rounded-2xl shadow-sm overflow-hidden"
+              >
                 
                 {/* HEADER */}
                 <div className="px-4 pt-4 pb-3 border-b border-gray-100">
@@ -365,6 +442,17 @@ const Teams = () => {
           </div>
         </div>
       </div>
+      
+      {/* Add CSS for hiding scrollbar */}
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </div>
   );
 };

@@ -22,7 +22,8 @@ const SignUp = () => {
     'Design Department',
     'Sales Department',
     'Project Manager Department',
-    'Marketing Department'
+    'Marketing Department',
+    'Tech Department'
   ];
 
   const handleChange = (e) => {
